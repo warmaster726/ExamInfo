@@ -11,5 +11,5 @@ if %errorlevel% neq 0 (
 
 REM Start the Flask app
 echo Starting the Flask app...
-python run.py
+run.py
 pause

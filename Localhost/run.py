@@ -15,7 +15,6 @@ def check_package(package_name):
 
 # Check necessary packages
 check_package("flask")
-sleep(0.5)  # Small delay to ensure the package is installed
 
 # Initialize Flask app
 app = Flask(__name__)
