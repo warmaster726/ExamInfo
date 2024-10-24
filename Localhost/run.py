@@ -1,7 +1,6 @@
 import subprocess
 import os
 from time import sleep
-from flask import Flask, render_template, jsonify
 from datetime import datetime, timedelta
 
 # Function to check if a package is installed, and install it if not
@@ -15,6 +14,7 @@ def check_package(package_name):
 
 # Check necessary packages
 check_package("flask")
+from flask import Flask, render_template, jsonify
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -39,12 +39,18 @@ def time_info():
     else:
         remaining_time = timedelta(seconds=0)  # Exam has ended
 
+    # Format remaining time as HH:mm:ss
+    total_seconds = int(remaining_time.total_seconds())
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    remaining_time_str = f"{hours:02}:{minutes:02}:{seconds:02}"
+
     current_time_str = now.strftime("%Y-%m-%d %H:%M:%S")  # Format current time
 
     # Create response data
     response = jsonify({
         'current_time': current_time_str,
-        'remaining_time': str(remaining_time).split('.')[0]  # Exclude microseconds
+        'remaining_time': remaining_time_str
     })
     response.headers.add('Cache-Control', 'no-store')  # No caching
     return response
