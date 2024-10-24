@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Info</title>
+    <!-- Link to the Orbitron font from Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('https://static.miraheze.org/windowswallpaperwiki/0/06/Img100_(Windows_11).jpg');  /* Background image */
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;  /* Two columns */
+            grid-template-rows: repeat(3, 1fr);  /* Three rows */
+            gap: 20px;
+            width: 800px;
+            height: 495px;
+            background-color: rgba(30, 30, 30, 0.8);  /* Semi-transparent background */
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);  /* Box shadow */
+            border-radius: 10px;
+        }
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(51, 51, 51, 0.8);  /* Semi-transparent background */
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            border-radius: 5px;
+        }
+        .grid-item span {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #bbbbbb;
+        }
+        .lcd-font {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5em;
+            color: #00ff00;  /* Green color for LCD font */
+        }
+    </style>
+</head>
+<body>
+    <!-- Grid container to hold all items -->
+    <div class="grid-container">
+        <!-- Exam venue number display -->
+        <div class="grid-item">
+            <span>Exam Venue Number</span>
+            <div class="lcd-font" id="exam-venue">E-90837</div>
+        </div>
+        <!-- Subject code display -->
+        <div class="grid-item">
+            <span>Subject Code</span>
+            <div class="lcd-font" id="subject-code">MathCP</div>
+        </div>
+        <!-- Exam start time display -->
+        <div class="grid-item">
+            <span>Start Time</span>
+            <div class="lcd-font" id="start-time">2024-10-24 15:00:00</div>
+        </div>
+        <!-- Exam end time display -->
+        <div class="grid-item">
+            <span>End Time</span>
+            <div class="lcd-font" id="end-time">2024-10-24 16:12:00</div>
+        </div>
+        <!-- Current time display -->
+        <div class="grid-item">
+            <span>Current Time (CST)</span>
+            <div class="lcd-font" id="current-time"></div>
+        </div>
+        <!-- Remaining time display -->
+        <div class="grid-item">
+            <span>Remaining Time</span>
+            <div class="lcd-font" id="remaining-time"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript to fetch and update time info from server -->
+    <script>
+        function updateTime() {
+            fetch('/time-info')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('current-time').innerText = data.current_time;  // Update current time
+                    document.getElementById('remaining-time').innerText = data.remaining_time;  // Update remaining time
+                })
+                .catch(error => console.error("Fetch error: ", error));
+        }
+
+        // Fetch new data every second
+        setInterval(updateTime, 1000);
+        updateTime();  // Initial fetch
+    </script>
+</body>
+</html>
