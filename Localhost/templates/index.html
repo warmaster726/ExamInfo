@@ -86,19 +86,19 @@
     <div class="grid-container">
         <div class="grid-item">
             <span>Exam Venue Number</span>
-            <div class="lcd-font" id="exam-venue">E-90837</div>
+            <div class="lcd-font">{{ exam_info['exam_venue'] }}</div>
         </div>
         <div class="grid-item">
             <span>Subject Code</span>
-            <div class="lcd-font" id="subject-code">MathCP</div>
+            <div class="lcd-font">{{ exam_info['subject_code'] }}</div>
         </div>
         <div class="grid-item">
             <span>Start Time</span>
-            <div class="lcd-font" id="start-time">2024-10-24 15:00:00</div>
+            <div class="lcd-font">{{ exam_info['start_time'] }}</div>
         </div>
         <div class="grid-item">
             <span>End Time</span>
-            <div class="lcd-font" id="end-time">2024-10-24 16:12:00</div>
+            <div class="lcd-font">{{ exam_info['end_time'] }}</div>
         </div>
         <div class="grid-item">
             <span>Current Time (CST)</span>
@@ -117,11 +117,10 @@
     </div>
     <script>
         let lastFetchTime = Date.now();
-
         function calculateTime() {
             let now = new Date();
-            let startTime = new Date('2024-10-24T15:00:00');
-            let endTime = new Date('2024-10-24T16:12:00');
+            let startTime = new Date('{{ exam_info["start_time"] }}');
+            let endTime = new Date('{{ exam_info["end_time"] }}');
             let currentTimeStr = now.getFullYear() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0') + ' ' + now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ':' + now.getSeconds().toString().padStart(2, '0');
             let remainingTime = (now < startTime) ? endTime - startTime : (now < endTime) ? endTime - now : 0;
             let remainingTimeStr = new Date(remainingTime).toISOString().substr(11, 8);
@@ -130,14 +129,13 @@
         }
 
         function updateTime() {
-            if (Date.now() - lastFetchTime > 5000) {
+            if (Date.now() - lastFetchTime > 1500) {
                 // Stop updating if 5 seconds have passed since the last fetch
                 clearInterval(updateInterval);
                 document.getElementById('error-modal').style.display = 'block';
                 console.log("Stopped updating due to 5 seconds timeout without fetch data.");
                 return;
             }
-
             calculateTime();
             fetch('/time-info')
                 .then(response => response.json())
